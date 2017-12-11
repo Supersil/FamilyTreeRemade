@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>1.jpeg</file>
+        <file>2.jpg</file>
+        <file>3.jpg</file>
+        <file>4.jpg</file>
+        <file>dad.jpg</file>
+        <file>family.rc</file>
+        <file>grandm.jpg</file>
+        <file>me.jpg</file>
+        <file>mom.jpg</file>
+        <file>no_photo.jpg</file>
+        <file>tree.bmp</file>
+        <file>tree.png</file>
+        <file>reset.png</file>
+    </qresource>
+</RCC>

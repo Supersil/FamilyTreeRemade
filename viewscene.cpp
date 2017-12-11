@@ -61,7 +61,8 @@ ViewScene::ViewScene(QWidget *parent)
 	zoomSliderLayout->addWidget(zoomOutIcon);
 
 	resetButton = new QToolButton;
-	resetButton->setText(tr("R"));
+	resetButton->setText(tr(""));
+	resetButton->setIcon(QPixmap("://reset.png"));
 	resetButton->setToolTip(tr("Сбросить положение сцены"));
 	resetButton->setEnabled(false);
 

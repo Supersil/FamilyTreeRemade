@@ -2,7 +2,9 @@
 #define WIDGET_H
 
 #include <QWidget>
-#include <viewscene.h>
+#include <QGraphicsScene>
+
+#include "viewscene.h"
 
 class Widget : public QWidget
 {
@@ -13,7 +15,9 @@ public:
 	~Widget();
 
 private:
+	QGraphicsScene * m_scene;
 
+	void createScene();
 };
 
 #endif // WIDGET_H

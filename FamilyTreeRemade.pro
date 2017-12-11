@@ -27,14 +27,24 @@ SOURCES += \
         main.cpp \
         widget.cpp \
     viewscene.cpp \
-    treeleaf.cpp
+    treeleaf.cpp \
+    person.cpp \
+    family.cpp
 
 HEADERS += \
         widget.h \
     viewscene.h \
-    treeleaf.h
+    treeleaf.h \
+    person.h \
+    family.h
 
 FORMS +=
 
 DISTFILES += \
-    Readme
+    README.md
+
+QMAKE_CXXFLAGS += -std=c++11
+
+RESOURCES += \
+    Resource/resources.qrc
+
