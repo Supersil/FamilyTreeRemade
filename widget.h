@@ -3,8 +3,11 @@
 
 #include <QWidget>
 #include <QGraphicsScene>
+#include <QHBoxLayout>
 
 #include "viewscene.h"
+#include <memory>
+
 
 class Widget : public QWidget
 {
@@ -15,7 +18,10 @@ public:
 	~Widget();
 
 private:
-	QGraphicsScene * m_scene;
+	std::unique_ptr<QGraphicsScene> m_scene;
+	std::unique_ptr<ViewScene> view;
+	std::unique_ptr<QHBoxLayout> lay;
+
 
 	void createScene();
 };

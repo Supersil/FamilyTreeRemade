@@ -16,7 +16,7 @@ class TreeLeaf: public MyGraphicsItem
 {
 	Q_OBJECT
 public:
-	TreeLeaf(QString strName, QString strPhotoPath, int iXPos, int iYPos);
+	TreeLeaf(QString strName, QString strPhotoPath);
 	~TreeLeaf();
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
@@ -32,8 +32,6 @@ protected:
 private:
 	QString m_strName;
 	QImage m_imgPhoto;
-	int m_iXPos;
-	int m_iYPos;
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 	bool m_bMovability;
 

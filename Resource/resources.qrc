@@ -13,5 +13,7 @@
         <file>tree.bmp</file>
         <file>tree.png</file>
         <file>reset.png</file>
+        <file>zoomin.png</file>
+        <file>zoomout.png</file>
     </qresource>
 </RCC>

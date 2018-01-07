@@ -6,6 +6,9 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QSlider>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <memory>
 
 class ViewScene;
 
@@ -44,10 +47,13 @@ private slots:
 
 
 private:
-	GraphicsView *graphicsView;
-	QLabel *label;
-	QToolButton *resetButton;
-	QSlider *zoomSlider;
+	std::unique_ptr<GraphicsView> graphicsView;
+	std::unique_ptr<QToolButton> resetButton;
+	std::unique_ptr<QSlider> zoomSlider;
+	std::unique_ptr<QVBoxLayout> zoomSliderLayout;
+	std::unique_ptr<QGridLayout> topLayout;
+	std::unique_ptr<QToolButton> zoomInBtn;
+	std::unique_ptr<QToolButton> zoomOutBtn;
 
 };
 

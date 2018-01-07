@@ -5,7 +5,7 @@
 #include <QMenu>
 #include <QGraphicsSceneContextMenuEvent>
 
-TreeLeaf::TreeLeaf(QString strName, QString strPhotoPath, int iXPos, int iYPos):	m_strName(strName), m_imgPhoto(strPhotoPath), m_iXPos(iXPos), m_iYPos(iYPos)
+TreeLeaf::TreeLeaf(QString strName, QString strPhotoPath):	m_strName(strName), m_imgPhoto(strPhotoPath)
 {
 	setToolTip(QObject::tr("Двойное нажатие ЛКМ - открыть информацию.\nПКМ - меню."));
 	m_bMovability = false;
@@ -40,12 +40,12 @@ void TreeLeaf::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 	menu.addAction("Добавить ребенка");
 	menu.addAction("Удалить");
 
-	QAction * replaceble = new QAction(&menu);
-	replaceble->setText(tr("Перемещаемый объект"));
-	replaceble->setCheckable(true);
-	replaceble->setChecked(m_bMovability);
-	connect(replaceble,SIGNAL(changed()),this,SLOT(changeMovability()));
-	menu.addAction(replaceble);//,this,SLOT(changeMovability()));
+	QAction replaceble(&menu);
+	replaceble.setText(tr("Перемещаемый объект"));
+	replaceble.setCheckable(true);
+	replaceble.setChecked(m_bMovability);
+	connect(&replaceble,SIGNAL(changed()),this,SLOT(changeMovability()));
+	menu.addAction(&replaceble);//,this,SLOT(changeMovability()));
 	menu.addAction("Установить родительскую связь");
 	QAction *selectedAction = menu.exec(event->screenPos());
 	if (selectedAction)
@@ -76,9 +76,9 @@ void TreeLeaf::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 	font.setPixelSize(20);
 	painter->setFont(font);
 
-	painter->drawImage(m_iXPos,m_iYPos,m_imgPhoto.scaled(300,380));
-	painter->drawText(QRectF(m_iXPos,m_iYPos+380,300,20),m_strName,to);
-	painter->drawRect(m_iXPos,m_iYPos,300,400);
+	painter->drawImage(0,0,m_imgPhoto.scaled(300,380));
+	painter->drawText(QRectF(0,380,300,20),m_strName,to);
+	painter->drawRect(0,0,300,400);
 
 }
 

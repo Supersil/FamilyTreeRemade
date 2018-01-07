@@ -2,8 +2,6 @@
 
 #include <QWheelEvent>
 #include <QStyle>
-#include <QVBoxLayout>
-#include <QGridLayout>
 #include <qmath.h>
 #include <QScrollBar>
 
@@ -26,7 +24,7 @@ ViewScene::ViewScene(QWidget *parent)
 	 : QFrame(parent)
 {
 	setFrameStyle(Sunken | StyledPanel);
-	graphicsView = new GraphicsView(this);
+	graphicsView = std::unique_ptr<GraphicsView>(new GraphicsView(this));
 	graphicsView->setRenderHint(QPainter::Antialiasing, false);
 	graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
 	graphicsView->setOptimizationFlags(QGraphicsView::DontSavePainterState);
@@ -36,51 +34,52 @@ ViewScene::ViewScene(QWidget *parent)
 	int size = style()->pixelMetric(QStyle::PM_ToolBarIconSize);
 	QSize iconSize(size, size);
 
-	QToolButton *zoomInIcon = new QToolButton;
-	zoomInIcon->setAutoRepeat(true);
-	zoomInIcon->setAutoRepeatInterval(33);
-	zoomInIcon->setAutoRepeatDelay(0);
-	zoomInIcon->setIcon(QPixmap(":/zoomin.png"));
-	zoomInIcon->setIconSize(iconSize);
-	QToolButton *zoomOutIcon = new QToolButton;
-	zoomOutIcon->setAutoRepeat(true);
-	zoomOutIcon->setAutoRepeatInterval(33);
-	zoomOutIcon->setAutoRepeatDelay(0);
-	zoomOutIcon->setIcon(QPixmap(":/zoomout.png"));
-	zoomOutIcon->setIconSize(iconSize);
-	zoomSlider = new QSlider;
+	zoomInBtn = std::unique_ptr<QToolButton>(new QToolButton);
+	zoomInBtn->setAutoRepeat(true);
+	zoomInBtn->setAutoRepeatInterval(33);
+	zoomInBtn->setAutoRepeatDelay(0);
+	zoomInBtn->setIcon(QPixmap("://zoomin.png"));
+	zoomInBtn->setIconSize(iconSize);
+
+	zoomOutBtn = std::unique_ptr<QToolButton>(new QToolButton);
+	zoomOutBtn->setAutoRepeat(true);
+	zoomOutBtn->setAutoRepeatInterval(33);
+	zoomOutBtn->setAutoRepeatDelay(0);
+	zoomOutBtn->setIcon(QPixmap("://zoomout.png"));
+	zoomOutBtn->setIconSize(iconSize);
+	zoomSlider = std::unique_ptr<QSlider>(new QSlider);
 	zoomSlider->setMinimum(0);
 	zoomSlider->setMaximum(500);
 	zoomSlider->setValue(250);
 	zoomSlider->setTickPosition(QSlider::TicksRight);
 
 	// Zoom slider layout
-	QVBoxLayout *zoomSliderLayout = new QVBoxLayout;
-	zoomSliderLayout->addWidget(zoomInIcon);
-	zoomSliderLayout->addWidget(zoomSlider);
-	zoomSliderLayout->addWidget(zoomOutIcon);
+	zoomSliderLayout = std::unique_ptr<QVBoxLayout>(new QVBoxLayout);
+	zoomSliderLayout->addWidget(zoomInBtn.get());
+	zoomSliderLayout->addWidget(zoomSlider.get());
+	zoomSliderLayout->addWidget(zoomOutBtn.get());
 
-	resetButton = new QToolButton;
+	resetButton = std::unique_ptr<QToolButton> (new QToolButton);
 	resetButton->setText(tr(""));
 	resetButton->setIcon(QPixmap("://reset.png"));
 	resetButton->setToolTip(tr("Сбросить положение сцены"));
 	resetButton->setEnabled(false);
 
 
-	QGridLayout *topLayout = new QGridLayout;
-	topLayout->addWidget(graphicsView, 1, 0);
-	topLayout->addLayout(zoomSliderLayout, 1, 1);
-	topLayout->addWidget(resetButton, 2, 1);
-	setLayout(topLayout);
+	topLayout = std::unique_ptr<QGridLayout>(new QGridLayout);
+	topLayout->addWidget(graphicsView.get(), 1, 0);
+	topLayout->addLayout(zoomSliderLayout.get(), 1, 1);
+	topLayout->addWidget(resetButton.get(), 2, 1);
+	setLayout(topLayout.get());
 
-	connect(resetButton, SIGNAL(clicked()), this, SLOT(resetView()));
-	connect(zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(setupMatrix()));
+	connect(resetButton.get(), SIGNAL(clicked()), this, SLOT(resetView()));
+	connect(zoomSlider.get(), SIGNAL(valueChanged(int)), this, SLOT(setupMatrix()));
 	connect(graphicsView->verticalScrollBar(), SIGNAL(valueChanged(int)),
 		this, SLOT(setResetButtonEnabled()));
 	connect(graphicsView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
 		this, SLOT(setResetButtonEnabled()));
-	connect(zoomInIcon, SIGNAL(clicked()), this, SLOT(zoomIn()));
-	connect(zoomOutIcon, SIGNAL(clicked()), this, SLOT(zoomOut()));
+	connect(zoomInBtn.get(), SIGNAL(clicked()), this, SLOT(zoomIn()));
+	connect(zoomOutBtn.get(), SIGNAL(clicked()), this, SLOT(zoomOut()));
 
 	graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
 
@@ -90,7 +89,7 @@ ViewScene::ViewScene(QWidget *parent)
 
 QGraphicsView *ViewScene::view() const
 {
-	 return static_cast<QGraphicsView *>(graphicsView);
+	 return static_cast<QGraphicsView *>(graphicsView.get());
 }
 
 void ViewScene::resetView()
@@ -120,6 +119,8 @@ void ViewScene::setupMatrix()
 
 void ViewScene::scroll(int dx, int dy)
 {
+	Q_UNUSED(dx);
+	Q_UNUSED(dy);
 	update();
 }
 
